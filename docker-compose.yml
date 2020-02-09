@@ -24,4 +24,4 @@ services:
       - ./auth_db/my.conf:/etc/mysql/conf.d/my.conf
 
   redis:
-    image: redis
+    image: redis:4
