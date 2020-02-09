@@ -1,6 +1,4 @@
-github.com/U-taro-ogw/go_test_sample v0.0.0-20200209070843-d5b4717e4687 h1:1mxsoyeNClElpKm/ZI9Q3Y9YUZYcJVoQyygYforeYwA=
-github.com/U-taro-ogw/go_test_sample v0.0.0-20200209084158-e1fbe888c382 h1:hkeqTTUt1i0G84QuyBvLzqaEP8AUsdC8xFu83X026QI=
-github.com/U-taro-ogw/go_test_sample/auth_api v0.0.0-20200209070843-d5b4717e4687 h1:IOySvHWSeHzludcXMK0d1UdNzWNg6aSbVALz5ENQhGc=
+github.com/U-taro-ogw/go_test_sample v0.0.0-20200209105022-29ada256e020 h1:CrzaO9Xs4Xjy3+1CUccVm/z9aYInZcBYSrKA20vtOHA=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/denisenkom/go-mssqldb v0.0.0-20191124224453-732737034ffd/go.mod h1:xbL0rPBG9cCiLr28tMa8zpbdarY27NDyej4t/EjAShU=
