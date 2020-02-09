@@ -1,0 +1,27 @@
+version: '3'
+services:
+  auth_api:
+    build: ./auth_api
+    volumes:
+      - ./:/go/auth_api
+    ports:
+      - "8083:8083"
+    environment:
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+
+  auth_db:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    volumes:
+      - ./auth_db/db_data:/var/lib/mysql
+      - ./auth_db/my.conf:/etc/mysql/conf.d/my.conf
+
+  redis:
+    image: redis
