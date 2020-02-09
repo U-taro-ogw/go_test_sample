@@ -3,7 +3,7 @@ services:
   auth_api:
     build: ./auth_api
     volumes:
-      - ./:/go/auth_api
+      - ./auth_api:/go/src/auth_api
     ports:
       - "8083:8083"
     environment:
