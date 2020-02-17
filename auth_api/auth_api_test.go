@@ -3,8 +3,9 @@ package main
 import (
 	"bytes"
 	"encoding/json"
-	//"github.com/gin-gonic/gin"
-	//. "github.com/U-taro-ogw/go_test_sample/auth_api"
+	"fmt"
+	authDb "github.com/U-taro-ogw/go_test_sample/auth_api/db/mysql"
+	"github.com/U-taro-ogw/go_test_sample/auth_api/models"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"net/http"
@@ -13,18 +14,13 @@ import (
 
 var _ = Describe("AuthApi", func() {
 
-	type PostParameter struct {
-		Email string `json:"email"`
-		Password string `json:"password"`
-	}
-
-	postParameter := new(PostParameter)
+	postParameter := new(models.User)
 
 	r := GetMainEngine()
 	w := httptest.NewRecorder()
 	BeforeEach(func() {
 		w = httptest.NewRecorder()
-		postParameter = new(PostParameter)
+		postParameter = new(models.User)
 	})
 
 	// /v1/signupへのrequest spec
@@ -32,9 +28,40 @@ var _ = Describe("AuthApi", func() {
 		Context("POSTパラメータが存在する場合", func() {
 
 			Context("email password が blank でない場合", func() {
-				It("会員登録成功", func() {
+				BeforeEach(func() {
 					postParameter.Email = "foo@example.com"
 					postParameter.Password = "password"
+				})
+
+				It("会員登録する", func() {
+					dbCon := authDb.MysqlConnect()
+					defer dbCon.Close()
+
+					//var user models.User
+					var beforeCount = 0
+					dbCon.Model(&models.User{}).Count(&beforeCount)
+					//dbCon.First(&user).Count(&beforeCount)
+					fmt.Println("-------------------------->>>>>>>>>>>>>>>>>>")
+					fmt.Println(beforeCount)
+					fmt.Println("-------------------------->>>>>>>>>>>>>>>>>>")
+
+					sampleJson, _ := json.Marshal(postParameter)
+					body := bytes.NewBuffer(sampleJson)
+					req, _ := http.NewRequest("POST", "v1/signup", body)
+
+					r.ServeHTTP(w, req)
+
+					var afterCount = 0
+					dbCon.Model(&models.User{}).Count(&afterCount)
+					fmt.Println("-------------------------->>>>>>>>>>>>>>>>>>")
+					fmt.Println(afterCount)
+					fmt.Println("-------------------------->>>>>>>>>>>>>>>>>>")
+					//dbCon.First(&user).Count(&afterCount)
+
+					Expect(afterCount).To(Equal(beforeCount + 1))
+				})
+
+				It("200を返却する", func() {
 					sampleJson, _ := json.Marshal(postParameter)
 					body := bytes.NewBuffer(sampleJson)
 
@@ -45,7 +72,7 @@ var _ = Describe("AuthApi", func() {
 			})
 
 			Context("email が blank の場合", func() {
-				It("404エラーを返す", func() {
+				It("404エラーを返却する", func() {
 					postParameter.Password = "password"
 					sampleJson, _ := json.Marshal(postParameter)
 					body := bytes.NewBuffer(sampleJson)
@@ -57,7 +84,7 @@ var _ = Describe("AuthApi", func() {
 			})
 
 			Context("password が blank の場合", func() {
-				It("404エラーを返す", func() {
+				It("404エラー返却する", func() {
 					postParameter.Email = "foo@example.com"
 					sampleJson, _ := json.Marshal(postParameter)
 					body := bytes.NewBuffer(sampleJson)
@@ -70,7 +97,7 @@ var _ = Describe("AuthApi", func() {
 		})
 
 		Context("POSTパラメータが存在しない場合", func() {
-			It("400エラーを返す", func() {
+			It("400エラーを返却する", func() {
 				req, _ := http.NewRequest("POST", "v1/signup", nil)
 				r.ServeHTTP(w, req)
 
