@@ -9,24 +9,22 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
-func GetMainEngine() *gin.Engine {
-	r := gin.Default()
 
+func GetMainEngine(userHandler handlers.UserHandler) *gin.Engine {
+	r := gin.Default()
+	v1 := r.Group("v1")
+	{
+		v1.POST("/signup", userHandler.Signup)
+	}
+	return r
+}
+
+func main() {
 	dbCon := authDb.MysqlConnect()
 	defer dbCon.Close()
 	dbCon.LogMode(true)
 
 	userHandler := handlers.UserHandler{Db: dbCon}
-
-	v1 := r.Group("v1")
-	{
-		v1.POST("/signup", userHandler.Signup)
-	}
-
-	return r
-}
-
-func main() {
 	fmt.Println("Hello, World!")
-	GetMainEngine().Run(":8083")
+	GetMainEngine(userHandler).Run(":8083")
 }
