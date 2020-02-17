@@ -1,10 +1,8 @@
 package handlers
 
 import (
-	//"fmt"
-	//"github.com/U-taro-ogw/go_test_sample/auth_api/modules"
+	"fmt"
 	"github.com/U-taro-ogw/go_test_sample/auth_api/models"
-	// "github.com/U-taro-ogw/auth_api/src/modules"
 	"github.com/gin-gonic/gin"
 	//"github.com/gomodule/redigo/redis"
 	"github.com/jinzhu/gorm"
@@ -14,12 +12,11 @@ import (
 
 type UserHandler struct {
 	Db *gorm.DB
-	//Redis redis.Conn
 }
 
 func (h *UserHandler) Signup(c *gin.Context) {
-	user := models.User{}
-	err := c.BindJSON(&user)
+	newUser := models.User{}
+	err := c.BindJSON(&newUser)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -27,13 +24,15 @@ func (h *UserHandler) Signup(c *gin.Context) {
 	}
 
 	v := validator.New()
-	if err := v.Struct(user); err != nil {
+	err = v.Struct(newUser)
+	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	h.Db.NewRecord(user)
-	h.Db.Create(&user)
+	h.Db.NewRecord(newUser)
+	fmt.Println(h.Db.Create(&newUser))
+
 
 	c.JSON(http.StatusCreated, gin.H{"message": "signup"})
 }
