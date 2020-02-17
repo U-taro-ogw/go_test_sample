@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	authDb "github.com/U-taro-ogw/go_test_sample/auth_api/db/mysql"
+	"github.com/U-taro-ogw/go_test_sample/auth_api/handlers"
 	"github.com/U-taro-ogw/go_test_sample/auth_api/models"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -14,13 +15,19 @@ import (
 
 var _ = Describe("AuthApi", func() {
 
+	dbCon := authDb.MysqlConnect()
 	postParameter := new(models.User)
+	userHandler := handlers.UserHandler{Db: dbCon}
 
-	r := GetMainEngine()
+	r := GetMainEngine(userHandler)
 	w := httptest.NewRecorder()
 	BeforeEach(func() {
 		w = httptest.NewRecorder()
 		postParameter = new(models.User)
+	})
+
+	AfterEach(func() {
+		defer dbCon.Close()
 	})
 
 	// /v1/signupへのrequest spec
@@ -34,16 +41,8 @@ var _ = Describe("AuthApi", func() {
 				})
 
 				It("会員登録する", func() {
-					dbCon := authDb.MysqlConnect()
-					defer dbCon.Close()
-
-					//var user models.User
 					var beforeCount = 0
 					dbCon.Model(&models.User{}).Count(&beforeCount)
-					//dbCon.First(&user).Count(&beforeCount)
-					fmt.Println("-------------------------->>>>>>>>>>>>>>>>>>")
-					fmt.Println(beforeCount)
-					fmt.Println("-------------------------->>>>>>>>>>>>>>>>>>")
 
 					sampleJson, _ := json.Marshal(postParameter)
 					body := bytes.NewBuffer(sampleJson)
@@ -53,10 +52,6 @@ var _ = Describe("AuthApi", func() {
 
 					var afterCount = 0
 					dbCon.Model(&models.User{}).Count(&afterCount)
-					fmt.Println("-------------------------->>>>>>>>>>>>>>>>>>")
-					fmt.Println(afterCount)
-					fmt.Println("-------------------------->>>>>>>>>>>>>>>>>>")
-					//dbCon.First(&user).Count(&afterCount)
 
 					Expect(afterCount).To(Equal(beforeCount + 1))
 				})

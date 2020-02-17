@@ -25,14 +25,14 @@ func (h *UserHandler) Signup(c *gin.Context) {
 
 	v := validator.New()
 	err = v.Struct(newUser)
+
+	fmt.Println(err)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	h.Db.NewRecord(newUser)
-	fmt.Println(h.Db.Create(&newUser))
-
+	h.Db.Create(&newUser)
 
 	c.JSON(http.StatusCreated, gin.H{"message": "signup"})
 }
