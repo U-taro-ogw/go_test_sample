@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"encoding/json"
-	//"fmt"
 	//"github.com/gin-gonic/gin"
 	//. "github.com/U-taro-ogw/go_test_sample/auth_api"
 	. "github.com/onsi/ginkgo"
@@ -41,7 +40,6 @@ var _ = Describe("AuthApi", func() {
 
 					req, _ := http.NewRequest("POST", "v1/signup", body)
 					r.ServeHTTP(w, req)
-
 					Expect(w.Code).To(Equal(201))
 				})
 			})
