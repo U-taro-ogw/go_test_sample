@@ -20,5 +20,6 @@ func MysqlConnect() *gorm.DB {
 
 	db.AutoMigrate(&models.User{})
 
+
 	return db
 }
