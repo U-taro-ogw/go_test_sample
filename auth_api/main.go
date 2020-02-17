@@ -2,29 +2,31 @@ package main
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
 	authDb "github.com/U-taro-ogw/go_test_sample/auth_api/db/mysql"
-	authenticationDb "github.com/U-taro-ogw/go_test_sample/auth_api/db/redis"
+	//authenticationDb "github.com/U-taro-ogw/go_test_sample/auth_api/db/redis"
 	"github.com/U-taro-ogw/go_test_sample/auth_api/handlers"
+	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
-func main() {
-	fmt.Println("Hello, World!")
+func GetMainEngine() *gin.Engine {
+	r := gin.Default()
 
 	dbCon := authDb.MysqlConnect()
 	defer dbCon.Close()
 	dbCon.LogMode(true)
 
-	redisCon := authenticationDb.RedisConnect()
+	userHandler := handlers.UserHandler{Db: dbCon}
 
-	userHandler := handlers.UserHandler{
-		Db: dbCon,
-		Redis: redisCon,
+	v1 := r.Group("v1")
+	{
+		v1.POST("/signup", userHandler.Signup)
 	}
-	d := gin.Default()
-	d.POST("/signup", userHandler.Signup)
-	//d.POST("/signin", userHandler.Signin)
 
-	d.Run(":8083")
+	return r
+}
+
+func main() {
+	fmt.Println("Hello, World!")
+	GetMainEngine().Run(":8083")
 }

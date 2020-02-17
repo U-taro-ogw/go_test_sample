@@ -5,7 +5,7 @@ import (
 	"github.com/U-taro-ogw/go_test_sample/auth_api/models"
 	// "github.com/U-taro-ogw/auth_api/src/modules"
 	"github.com/gin-gonic/gin"
-	"github.com/gomodule/redigo/redis"
+	//"github.com/gomodule/redigo/redis"
 	"github.com/jinzhu/gorm"
 	"net/http"
 )
@@ -17,7 +17,7 @@ import (
 // メソッドによってはredisを全く使用しないのに構造体に含めて良いものか
 type UserHandler struct {
 	Db *gorm.DB
-	Redis redis.Conn
+	//Redis redis.Conn
 }
 
 func (h *UserHandler) Signup(c *gin.Context) {
