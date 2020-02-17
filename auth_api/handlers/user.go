@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	//"github.com/U-taro-ogw/go_test_sample/auth_api/modules"
 	"github.com/U-taro-ogw/go_test_sample/auth_api/models"
 	// "github.com/U-taro-ogw/auth_api/src/modules"
@@ -23,6 +24,10 @@ type UserHandler struct {
 func (h *UserHandler) Signup(c *gin.Context) {
 	user := models.User{}
 	err := c.BindJSON(&user)
+
+	fmt.Print("ああああああああああああああ")
+	fmt.Print(user)
+
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
