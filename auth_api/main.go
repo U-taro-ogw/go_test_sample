@@ -15,6 +15,7 @@ func GetMainEngine(userHandler handlers.UserHandler) *gin.Engine {
 	v1 := r.Group("v1")
 	{
 		v1.POST("/signup", userHandler.Signup)
+		v1.POST("/signin", userHandler.Signin)
 	}
 	return r
 }
