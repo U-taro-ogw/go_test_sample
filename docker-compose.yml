@@ -10,6 +10,8 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
+    links:
+      - auth_db
 
   auth_db:
     image: mysql:8.0
@@ -23,5 +25,5 @@ services:
       - ./auth_db/db_data:/var/lib/mysql
       - ./auth_db/my.conf:/etc/mysql/conf.d/my.conf
 
-  redis:
-    image: redis:4
+#  redis:
+#    image: redis:4
