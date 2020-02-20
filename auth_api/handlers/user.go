@@ -48,7 +48,7 @@ func (h *UserHandler) Signin(c *gin.Context) {
 		fmt.Println("401エラーーーーー")
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 	} else {
-		jwtToken := modules.GetTokenHandler()
+		jwtToken := modules.GenerateJwtToken()
 		//fmt.Println("200サクセスーーーーーーー")
 		//fmt.Println(jwtToken)
 		//modules.SetRedis(h.Redis, jwtToken, "111")
