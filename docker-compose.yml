@@ -24,6 +24,7 @@ services:
     volumes:
       - ./auth_db/db_data:/var/lib/mysql
       - ./auth_db/my.conf:/etc/mysql/conf.d/my.conf
-
+    security_opt:
+      - seccomp:unconfined
 #  redis:
 #    image: redis:4
