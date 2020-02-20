@@ -4,7 +4,7 @@ import (
 jwt "github.com/dgrijalva/jwt-go"
 )
 
-func GetTokenHandler() string {
+func GenerateJwtToken() string {
 	// headerのセット
 	token := jwt.New(jwt.SigningMethodHS256)
 	// 電子署名
