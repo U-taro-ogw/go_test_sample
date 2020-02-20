@@ -4,7 +4,6 @@ import (
 	"bytes"
 	//"encoding/binary"
 	"encoding/json"
-	"fmt"
 	authDb "github.com/U-taro-ogw/go_test_sample/auth_api/db/mysql"
 	"github.com/U-taro-ogw/go_test_sample/auth_api/handlers"
 	"github.com/U-taro-ogw/go_test_sample/auth_api/models"
@@ -106,6 +105,9 @@ var _ = Describe("AuthApi", func() {
 	Describe("Signin", func() {
 		Context("POSTパラメータが存在する場合", func() {
 			Context("パラメータ通りのuserが存在する場合", func() {
+
+				type ApiResponse struct { Jwt string `json:"jwt"` }
+
 				BeforeEach(func() {
 					postParameter.Email = "foo@example.com"
 					postParameter.Password = "password"
@@ -120,7 +122,7 @@ var _ = Describe("AuthApi", func() {
 					Expect(w.Code).To(Equal(200))
 				})
 
-				type ApiResponse struct { Jwt string `json:"jwt"` }
+
 
 				It("jwt tokenを返却する", func() {
 					sampleJson, _ := json.Marshal(postParameter)
@@ -129,18 +131,13 @@ var _ = Describe("AuthApi", func() {
 					req, _ := http.NewRequest("POST", "v1/signin", body)
 					r.ServeHTTP(w, req)
 
-					a := ApiResponse{}
-					fmt.Println("test------------")
-					fmt.Println(w.Body.String())
-					json.Unmarshal(w.Body.Bytes(), &a)
+					apiResponse := ApiResponse{}
+					json.Unmarshal(w.Body.Bytes(), &apiResponse)
 
-					fmt.Println(a.Jwt)
-
-					// module.
-
-					fmt.Println("------------test")
-					Expect(w.Body).To(Equal(200))
-
+					// TODO 非常によろしくない。
+					// jwt.New().SignedString([]byte("hoge"))
+					// の部分をmock化して都合の良い文字列を返すようにしたい
+					Expect(apiResponse.Jwt).To(Equal("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.wh5S0NKkGRk5KnRDZlXcZPziwOVXgFPs-jy6U24fZCQ"))
 				})
 
 				//It("jwt tokenを保存する", func() {
