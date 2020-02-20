@@ -2,7 +2,7 @@ package main
 
 import (
 	"bytes"
-	"encoding/binary"
+	//"encoding/binary"
 	"encoding/json"
 	"fmt"
 	authDb "github.com/U-taro-ogw/go_test_sample/auth_api/db/mysql"
@@ -130,22 +130,13 @@ var _ = Describe("AuthApi", func() {
 					r.ServeHTTP(w, req)
 
 					a := ApiResponse{}
-					reader := bytes.NewReader(w.Body)
-					binary.Read(reader, binary.LittleEndian, &a)
-
-
-
-					var MyResult []ApiResponse; err := json.NewDecoder(w.Body).Decode(&MyResult)
-					if err != nil {
-						fmt.Println("err != nil")
-						fmt.Println(err)
-					}
 					fmt.Println("test------------")
-					fmt.Println(MyResult)
-					//fmt.Println(w.Body)
-					//fmt.Println(w.Body["jwt"])
-					//fmt.Println(reflect.TypeOf(w.Body))
+					fmt.Println(w.Body.String())
+					json.Unmarshal(w.Body.Bytes(), &a)
 
+					fmt.Println(a.Jwt)
+
+					// module.
 
 					fmt.Println("------------test")
 					Expect(w.Body).To(Equal(200))
