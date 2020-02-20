@@ -2,7 +2,9 @@ package main
 
 import (
 	"bytes"
+	"encoding/binary"
 	"encoding/json"
+	"fmt"
 	authDb "github.com/U-taro-ogw/go_test_sample/auth_api/db/mysql"
 	"github.com/U-taro-ogw/go_test_sample/auth_api/handlers"
 	"github.com/U-taro-ogw/go_test_sample/auth_api/models"
@@ -10,6 +12,7 @@ import (
 	. "github.com/onsi/gomega"
 	"net/http"
 	"net/http/httptest"
+	//"reflect"
 )
 
 var _ = Describe("AuthApi", func() {
@@ -26,7 +29,7 @@ var _ = Describe("AuthApi", func() {
 	})
 
 	AfterEach(func() {
-		defer dbCon.Close()
+		//defer dbCon.Close()
 	})
 
 	// /v1/signupへのrequest spec
@@ -99,7 +102,6 @@ var _ = Describe("AuthApi", func() {
 		})
 	})
 
-
 	// /v1/signinへのrequest spec
 	Describe("Signin", func() {
 		Context("POSTパラメータが存在する場合", func() {
@@ -118,27 +120,52 @@ var _ = Describe("AuthApi", func() {
 					Expect(w.Code).To(Equal(200))
 				})
 
+				type ApiResponse struct { Jwt string `json:"jwt"` }
+
 				It("jwt tokenを返却する", func() {
+					sampleJson, _ := json.Marshal(postParameter)
+					body := bytes.NewBuffer(sampleJson)
+
+					req, _ := http.NewRequest("POST", "v1/signin", body)
+					r.ServeHTTP(w, req)
+
+					a := ApiResponse{}
+					reader := bytes.NewReader(w.Body)
+					binary.Read(reader, binary.LittleEndian, &a)
+
+
+
+					var MyResult []ApiResponse; err := json.NewDecoder(w.Body).Decode(&MyResult)
+					if err != nil {
+						fmt.Println("err != nil")
+						fmt.Println(err)
+					}
+					fmt.Println("test------------")
+					fmt.Println(MyResult)
+					//fmt.Println(w.Body)
+					//fmt.Println(w.Body["jwt"])
+					//fmt.Println(reflect.TypeOf(w.Body))
+
+
+					fmt.Println("------------test")
+					Expect(w.Body).To(Equal(200))
 
 				})
 
-				It("jwt tokenを保存する", func() {
-
-				})
+				//It("jwt tokenを保存する", func() {
+				//})
 			})
 
 			Context("パラメータ通りのuserが存在しない場合", func() {
-				It("401エラーを返却する", func() {
-
-				})
+				//It("401エラーを返却する", func() {
+				//})
 			})
 
 		})
 
 		Context("POSTパラメータが存在しない場合", func() {
-			It("401エラーを返却する", func() {
-
-			})
+			//It("401エラーを返却する", func() {
+			//})
 		})
 	})
 })
