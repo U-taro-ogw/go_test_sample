@@ -4,12 +4,13 @@ import (
 	"fmt"
 	//"fmt"
 	"github.com/U-taro-ogw/go_test_sample/auth_api/models"
-	"github.com/U-taro-ogw/go_test_sample/auth_api/modules"
+	//"github.com/U-taro-ogw/go_test_sample/auth_api/modules"
 	"github.com/gin-gonic/gin"
 	//"github.com/gomodule/redigo/redis"
 	"github.com/jinzhu/gorm"
 	"gopkg.in/go-playground/validator.v9"
 	"net/http"
+	jwt "github.com/dgrijalva/jwt-go"
 )
 
 type UserHandler struct {
@@ -39,7 +40,6 @@ func (h *UserHandler) Signup(c *gin.Context) {
 }
 
 func (h *UserHandler) Signin(c *gin.Context) {
-	//c.JSON(http.StatusOK, gin.H{"response": "ok"})
 	var userParam models.User
 	var findUser models.User
 	c.BindJSON(&userParam)
@@ -48,10 +48,8 @@ func (h *UserHandler) Signin(c *gin.Context) {
 		fmt.Println("401エラーーーーー")
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 	} else {
-		jwtToken := modules.GenerateJwtToken()
-		//fmt.Println("200サクセスーーーーーーー")
-		//fmt.Println(jwtToken)
-		//modules.SetRedis(h.Redis, jwtToken, "111")
+		token := jwt.New(jwt.SigningMethodHS256)
+		jwtToken, _ := token.SignedString([]byte("hoge"))
 		c.JSON(http.StatusOK, gin.H{"jwt": jwtToken})
 	}
 }
