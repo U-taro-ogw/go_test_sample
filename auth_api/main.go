@@ -22,7 +22,7 @@ func GetMainEngine(userHandler handlers.UserHandler) *gin.Engine {
 
 func main() {
 	dbCon := authDb.MysqlConnect()
-	//defer dbCon.Close()
+	defer dbCon.Close()
 	dbCon.LogMode(true)
 
 	userHandler := handlers.UserHandler{Db: dbCon}
