@@ -4,13 +4,15 @@ import (
 	jwt "github.com/dgrijalva/jwt-go"
 )
 
-// 関数は1つ以上の引数を取るべきだ
-// って論があったはず
-func GenerateJwtToken() string {
-	// headerのセット
-	token := jwt.New(jwt.SigningMethodHS256)
-	// 電子署名
-	tokenString, _ := token.SignedString([]byte("hoge"))
+type JwtToken interface {
+	GetJwtToken() string
+}
 
+func GetJwtToken() string {
+	// ユーザ固有の情報もjwt tokenに含めた方が良さそう
+	// 電子署名を取得する処理等...をメソッド分けする(した方が良いのか...?)
+	jwtSignature := []byte("hoge")
+	token := jwt.New(jwt.SigningMethodHS256)
+	tokenString, _ := token.SignedString(jwtSignature)
 	return tokenString
 }
