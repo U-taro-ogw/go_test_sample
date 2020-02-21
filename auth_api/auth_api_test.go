@@ -147,9 +147,10 @@ var _ = Describe("AuthApi", func() {
 					Expect(apiResponse.Jwt).To(Equal("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.wh5S0NKkGRk5KnRDZlXcZPziwOVXgFPs-jy6U24fZCQ"))
 				})
 
-				//It("jwt tokenを保存する", func() {
-				//
-				//})
+				It("jwt tokenを保存する", func() {
+
+					Expect(1).To(Equal(2))
+				})
 			})
 
 			Context("パラメータ通りのuserが存在しない場合", func() {
