@@ -8,11 +8,18 @@ import (
 	authDb "github.com/U-taro-ogw/go_test_sample/auth_api/db/mysql"
 	"github.com/U-taro-ogw/go_test_sample/auth_api/handlers"
 	"github.com/U-taro-ogw/go_test_sample/auth_api/models"
+	"github.com/U-taro-ogw/go_test_sample/auth_api/modules"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"net/http"
 	"net/http/httptest"
 )
+
+
+type JwtTokenMock struct {}
+func (j JwtTokenMock) getEmail() string {
+	return "hoge"
+}
 
 var _ = Describe("AuthApi", func() {
 
@@ -118,7 +125,6 @@ var _ = Describe("AuthApi", func() {
 			})
 
 			Context("パラメータ通りのuserが存在する場合", func() {
-
 				BeforeEach(func() {
 					postParameter.Email = testUserEmail
 					postParameter.Password = testUserPassword
@@ -143,6 +149,9 @@ var _ = Describe("AuthApi", func() {
 					m := make(map[string]string)
 					json.Unmarshal(w.Body.Bytes(), &m)
 
+					mock := JwtTokenMock{}
+					hoge := modules.GetJwtToken(mock)
+					fmt.Println(hoge)
 					// TODO 非常によろしくない。
 					// jwt.New().SignedString([]byte("hoge"))
 					// の部分をmock化して都合の良い文字列を返すようにしたい
