@@ -49,11 +49,12 @@ func (h *UserHandler) Signin(c *gin.Context) {
 	}
 
 	if err := h.Db.Where("email = ? AND password = ?", userParam.Email, userParam.Password).First(&findUser).Error; gorm.IsRecordNotFoundError(err) {
-		fmt.Println("401エラーーーーー")
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 		return
 	} else {
-		jwtToken := modules.GetJwtToken(findUser.Email)
+		j := modules.JwtToken{findUser.Email}
+		jwtToken := modules.GetJwtToken(j)
+		fmt.Println("ログイン成功")
 		c.JSON(http.StatusOK, gin.H{"jwt_token": jwtToken})
 		return
 	}
