@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"bytes"
 	"encoding/json"
 	authDb "github.com/U-taro-ogw/go_test_sample/auth_api/db/mysql"
@@ -115,7 +116,7 @@ var _ = Describe("AuthApi", func() {
 
 			Context("パラメータ通りのuserが存在する場合", func() {
 
-				type ApiResponse struct { Jwt string `json:"jwt"` }
+				type ApiResponse struct { Jwt string `json:"jwt_token"` }
 
 				BeforeEach(func() {
 					postParameter.Email = testUserEmail
@@ -144,11 +145,12 @@ var _ = Describe("AuthApi", func() {
 					// TODO 非常によろしくない。
 					// jwt.New().SignedString([]byte("hoge"))
 					// の部分をmock化して都合の良い文字列を返すようにしたい
-					Expect(apiResponse.Jwt).To(Equal("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.wh5S0NKkGRk5KnRDZlXcZPziwOVXgFPs-jy6U24fZCQ"))
+					// => この考え方でコード書かないほうが良い可能性もアル
+					Expect(apiResponse.Jwt).To(Equal("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.ez9OosQLyqzPvW6MoL6UzxmSrQ5BfSo8nvXbNSJdevU"))
 				})
 
 				It("jwt tokenを保存する", func() {
-
+					//
 					Expect(1).To(Equal(2))
 				})
 			})
