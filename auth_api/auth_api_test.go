@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"reflect"
 	"bytes"
 	"encoding/json"
 	authDb "github.com/U-taro-ogw/go_test_sample/auth_api/db/mysql"
@@ -19,6 +20,8 @@ var _ = Describe("AuthApi", func() {
 	postParameter := new(models.User)
 	userHandler := handlers.UserHandler{Db: dbCon}
 
+	fmt.Println("ginkgo start")
+	fmt.Println(reflect.TypeOf("ginkgo start"))
 	r := GetMainEngine(userHandler)
 	w := httptest.NewRecorder()
 	BeforeEach(func() {
@@ -116,8 +119,6 @@ var _ = Describe("AuthApi", func() {
 
 			Context("パラメータ通りのuserが存在する場合", func() {
 
-				type ApiResponse struct { Jwt string `json:"jwt_token"` }
-
 				BeforeEach(func() {
 					postParameter.Email = testUserEmail
 					postParameter.Password = testUserPassword
@@ -139,18 +140,19 @@ var _ = Describe("AuthApi", func() {
 					req, _ := http.NewRequest("POST", "v1/signin", body)
 					r.ServeHTTP(w, req)
 
-					apiResponse := ApiResponse{}
-					json.Unmarshal(w.Body.Bytes(), &apiResponse)
+					m := make(map[string]string)
+					json.Unmarshal(w.Body.Bytes(), &m)
 
 					// TODO 非常によろしくない。
 					// jwt.New().SignedString([]byte("hoge"))
 					// の部分をmock化して都合の良い文字列を返すようにしたい
 					// => この考え方でコード書かないほうが良い可能性もアル
-					Expect(apiResponse.Jwt).To(Equal("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.ez9OosQLyqzPvW6MoL6UzxmSrQ5BfSo8nvXbNSJdevU"))
+					Expect(m["jwt_token"]).To(Equal("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.ez9OosQLyqzPvW6MoL6UzxmSrQ5BfSo8nvXbNSJdevU"))
 				})
 
 				It("jwt tokenを保存する", func() {
-					//
+					// TODO redis保存するmoduleをmock化したい
+
 					Expect(1).To(Equal(2))
 				})
 			})
