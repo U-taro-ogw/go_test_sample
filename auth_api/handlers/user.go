@@ -3,7 +3,8 @@ package handlers
 import (
 	"fmt"
 	"github.com/U-taro-ogw/go_test_sample/auth_api/models"
-	jwt "github.com/dgrijalva/jwt-go"
+	"github.com/U-taro-ogw/go_test_sample/auth_api/modules"
+	//jwt "github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	"gopkg.in/go-playground/validator.v9"
@@ -52,9 +53,8 @@ func (h *UserHandler) Signin(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 		return
 	} else {
-		token := jwt.New(jwt.SigningMethodHS256)
-		jwtToken, _ := token.SignedString([]byte("hoge"))
-		c.JSON(http.StatusOK, gin.H{"jwt": jwtToken})
+		jwtToken := modules.GetJwtToken(findUser.Email)
+		c.JSON(http.StatusOK, gin.H{"jwt_token": jwtToken})
 		return
 	}
 }
