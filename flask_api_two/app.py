@@ -5,11 +5,6 @@ app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
 redis = Redis(host='redis', port=6379, db=1)
 
-@app.route('/')
-def hello():
-    return 'Hello My App'
-
-
 # redis疎通確認
 @app.route('/redis_hits')
 def redis_hits():
@@ -25,7 +20,7 @@ def search():
         return jsonify({"error": "Unauthorized"}), 401
 
     ret_dict = {
-        "api_name": "flask_api_one",
+        "api_name": "flask_api_two",
         "info": {
             "language": "python",
             "framework": "flask"
@@ -34,4 +29,4 @@ def search():
     return jsonify(ret_dict), 200
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", debug=True)
+    app.run(host="0.0.0.0", debug=True, port=6000)
