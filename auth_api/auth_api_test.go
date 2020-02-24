@@ -5,10 +5,10 @@ import (
 	"encoding/json"
 	"fmt"
 	authDb "github.com/U-taro-ogw/go_test_sample/auth_api/db/mysql"
+	redisConnect "github.com/U-taro-ogw/go_test_sample/auth_api/db/redis"
 	"github.com/U-taro-ogw/go_test_sample/auth_api/handlers"
 	"github.com/U-taro-ogw/go_test_sample/auth_api/models"
 	"github.com/U-taro-ogw/go_test_sample/auth_api/modules"
-	redisConnect "github.com/U-taro-ogw/go_test_sample/auth_api/db/redis"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"net/http"
@@ -164,7 +164,6 @@ var _ = Describe("AuthApi", func() {
 
 				It("jwt tokenを保存する", func() {
 					// TODO redis保存するmoduleをmock化したい
-
 					sampleJson, _ := json.Marshal(postParameter)
 					body := bytes.NewBuffer(sampleJson)
 
