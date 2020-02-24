@@ -1,1 +1,3 @@
-# GoのBDDとマイクロサービスアーキテクチャを理解する
+# ginkgoを使ったテスト
+
+GoでBDDとgoroutinを実践
