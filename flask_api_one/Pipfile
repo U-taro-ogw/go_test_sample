@@ -1,0 +1,19 @@
+[[source]]
+url = 'https://pypi.org/simple'
+verify_ssl = true
+name = 'pypi'
+
+[packages]
+flask = '*'
+redis = '*'
+elasticsearch = '*'
+elasticsearch-dsl = '*'
+hiredis = "*"
+
+[dev-packages]
+flake8 = '*'
+mamba = '*'
+expects = '*'
+
+[requires]
+python_version = '3.7'
