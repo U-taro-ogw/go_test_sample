@@ -2,3 +2,4 @@
 .env
 auth_db/db_data/
 auth_api/auth_api
+bff_api/bff_api

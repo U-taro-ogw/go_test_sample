@@ -47,5 +47,14 @@ services:
     depends_on:
       - redis
 
+  bff_api:
+    build: ./bff_api
+    volumes:
+      - ./bff_api:/go/src/bff_api
+    ports:
+      - "8082:8082"
+    depends_on:
+      - redis
+
   redis:
     image: redis:4
