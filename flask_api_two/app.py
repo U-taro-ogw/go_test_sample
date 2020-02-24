@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from redis import Redis
+from time import sleep
 
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
@@ -19,14 +20,23 @@ def search():
     if not auth:
         return jsonify({"error": "Unauthorized"}), 401
 
-    ret_dict = {
+    api_response = {
         "api_name": "flask_api_two",
         "info": {
             "language": "python",
             "framework": "flask"
         }
     }
-    return jsonify(ret_dict), 200
+    return jsonify(api_response), 200
+
+@app.route('/sleep_api', methods=['GET'])
+def sleep_api():
+    sleep(10)
+    api_response = {
+        "api_name": "flask_api_two",
+        "sleep_time": 10
+    }
+    return jsonify(api_response), 200
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True, port=6000)
