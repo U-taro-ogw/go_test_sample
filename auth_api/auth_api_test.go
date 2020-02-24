@@ -8,6 +8,7 @@ import (
 	"github.com/U-taro-ogw/go_test_sample/auth_api/handlers"
 	"github.com/U-taro-ogw/go_test_sample/auth_api/models"
 	"github.com/U-taro-ogw/go_test_sample/auth_api/modules"
+	redisConnect "github.com/U-taro-ogw/go_test_sample/auth_api/db/redis"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"net/http"
@@ -117,6 +118,7 @@ var _ = Describe("AuthApi", func() {
 		Context("POSTパラメータが存在する場合", func() {
 			testUserEmail := "foo@example.com"
 			testUserPassword := "password"
+			jwtTokenStr := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.ez9OosQLyqzPvW6MoL6UzxmSrQ5BfSo8nvXbNSJdevU"
 			BeforeEach(func() {
 				testUser := models.User{}
 				testUser.Email = testUserEmail
@@ -157,13 +159,22 @@ var _ = Describe("AuthApi", func() {
 					// jwt.New().SignedString([]byte("hoge"))
 					// の部分をmock化して都合の良い文字列を返すようにしたい
 					// => この考え方でコード書かないほうが良い可能性もアル
-					Expect(m["jwt_token"]).To(Equal("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.ez9OosQLyqzPvW6MoL6UzxmSrQ5BfSo8nvXbNSJdevU"))
+					Expect(m["jwt_token"]).To(Equal(jwtTokenStr))
 				})
 
 				It("jwt tokenを保存する", func() {
 					// TODO redis保存するmoduleをmock化したい
 
-					Expect(1).To(Equal(2))
+					sampleJson, _ := json.Marshal(postParameter)
+					body := bytes.NewBuffer(sampleJson)
+
+					req, _ := http.NewRequest("POST", "v1/signin", body)
+					r.ServeHTTP(w, req)
+
+					r := redisConnect.RedisConnect()
+					val := modules.RedisGet(r, jwtTokenStr)
+
+					Expect(val).To(Equal("111"))
 				})
 			})
 
