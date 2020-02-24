@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/U-taro-ogw/go_test_sample/auth_api/models"
 	"github.com/U-taro-ogw/go_test_sample/auth_api/modules"
-	//jwt "github.com/dgrijalva/jwt-go"
+	"github.com/U-taro-ogw/go_test_sample/auth_api/db/redis"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	"gopkg.in/go-playground/validator.v9"
@@ -52,8 +52,14 @@ func (h *UserHandler) Signin(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 		return
 	} else {
+		// jwt token生成
 		j := modules.JwtToken{findUser.Email}
 		jwtToken := modules.GetJwtToken(j)
+
+		// redis保存
+		r := redis.RedisConnect()
+		modules.RedisSet(r, jwtToken, "111")
+
 		fmt.Println("ログイン成功")
 		c.JSON(http.StatusOK, gin.H{"jwt_token": jwtToken})
 		return

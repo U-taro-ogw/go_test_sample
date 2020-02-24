@@ -1,10 +1,9 @@
 package main
 
 import (
-	"fmt"
-	"reflect"
 	"bytes"
 	"encoding/json"
+	"fmt"
 	authDb "github.com/U-taro-ogw/go_test_sample/auth_api/db/mysql"
 	"github.com/U-taro-ogw/go_test_sample/auth_api/handlers"
 	"github.com/U-taro-ogw/go_test_sample/auth_api/models"
@@ -13,13 +12,14 @@ import (
 	. "github.com/onsi/gomega"
 	"net/http"
 	"net/http/httptest"
+	"reflect"
 )
 
 
-type JwtTokenMock struct {}
-func (j JwtTokenMock) getEmail() string {
-	return "hoge"
-}
+//type JwtTokenMock struct {}
+//func (j JwtTokenMock) getEmail() string {
+//	return "hoge"
+//}
 
 var _ = Describe("AuthApi", func() {
 
@@ -149,9 +149,10 @@ var _ = Describe("AuthApi", func() {
 					m := make(map[string]string)
 					json.Unmarshal(w.Body.Bytes(), &m)
 
-					mock := JwtTokenMock{}
-					hoge := modules.GetJwtToken(mock)
-					fmt.Println(hoge)
+					//mock := JwtTokenMock{}
+					//hoge := modules.GetJwtToken(mock)
+					//fmt.Println(hoge)
+
 					// TODO 非常によろしくない。
 					// jwt.New().SignedString([]byte("hoge"))
 					// の部分をmock化して都合の良い文字列を返すようにしたい
