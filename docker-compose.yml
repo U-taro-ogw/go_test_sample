@@ -12,6 +12,8 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
     links:
       - auth_db
+    depends_on:
+      - redis
 
   auth_db:
     image: mysql:8.0
@@ -27,12 +29,12 @@ services:
     security_opt:
       - seccomp:unconfined
 
-  flask_api_red:
-    build: ./flask_api
+  flask_api_one:
+    build: ./flask_api_one
     ports:
       - "5000:5000"
     volumes:
-      - ./app:/usr/src/app
+      - ./flask_api_one:/usr/src/flask_api_one
     depends_on:
       - redis
 
