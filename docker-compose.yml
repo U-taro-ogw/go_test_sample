@@ -38,5 +38,14 @@ services:
     depends_on:
       - redis
 
+  flask_api_two:
+    build: ./flask_api_two
+    ports:
+      - "6000:6000"
+    volumes:
+      - ./flask_api_two:/usr/src/flask_api_two
+    depends_on:
+      - redis
+
   redis:
     image: redis:4
