@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	authDb "github.com/U-taro-ogw/go_test_sample/auth_api/db/mysql"
-	//authenticationDb "github.com/U-taro-ogw/go_test_sample/auth_api/db/redis"
 	"github.com/U-taro-ogw/go_test_sample/auth_api/handlers"
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/mysql"

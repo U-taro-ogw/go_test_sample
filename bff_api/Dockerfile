@@ -1,17 +1,8 @@
-FROM golang:1.13.1
+FROM golang:1.13-alpine
 
-RUN apt-get update -qq
+WORKDIR /bff_api
 
-ENV GO111MODULE=on
+RUN apk add --no-cache alpine-sdk git && go get -u github.com/oxequa/realize
 
-WORKDIR /go/src/bff_api
-
-COPY go.mod .
-COPY go.sum .
-
-RUN go mod download
-
-COPY . .
-
-RUN go get github.com/pilu/fresh
-CMD ["fresh"]
+EXPOSE 8082
+CMD ["realize", "start"]
