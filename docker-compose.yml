@@ -3,17 +3,17 @@ services:
   auth_api:
     build: ./auth_api
     volumes:
-      - ./auth_api:/go/src/auth_api
+      - ./auth_api:/auth_api
     ports:
       - "8083:8083"
     environment:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
-    links:
-      - auth_db
     depends_on:
       - redis
+      - auth_db
+    restart: always
 
   auth_db:
     image: mysql:8.0
@@ -50,11 +50,12 @@ services:
   bff_api:
     build: ./bff_api
     volumes:
-      - ./bff_api:/go/src/bff_api
+      - ./bff_api:/bff_api
     ports:
       - "8082:8082"
     depends_on:
       - redis
+    restart: always
 
   redis:
     image: redis:4
