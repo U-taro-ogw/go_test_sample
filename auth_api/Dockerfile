@@ -1,6 +1,6 @@
 FROM golang:1.13.1
 
-RUN apt-get update -qq
+RUN apt-get update -qq && apk add --no-cache alpine-sdk git
 
 ENV GO111MODULE=on
 

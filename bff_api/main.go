@@ -38,7 +38,9 @@ func(h *ApiHandler) Apis(c *gin.Context) {
 	// port 5000にfetch
 	// port 6000にfetch
 	// merge
+	//http.Geth.ApiOneUrl
 
+	
 	c.JSON(http.StatusOK, gin.H{"hoge": "fuga"})
 	return
 }

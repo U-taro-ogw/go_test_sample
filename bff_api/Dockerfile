@@ -1,10 +1,10 @@
 FROM golang:1.13.1
 
-RUN apt-get update -qq
+RUN apt-get update -qq && apk add --no-cache alpine-sdk git
 
 ENV GO111MODULE=on
 
-WORKDIR /go/src/bff_api
+WORKDIR /go/src/github.com/U-taro-ogw/go_test_sample
 
 COPY go.mod .
 COPY go.sum .
@@ -13,5 +13,4 @@ RUN go mod download
 
 COPY . .
 
-RUN go get github.com/pilu/fresh
-CMD ["fresh"]
+CMD ["go", "run", "main.go"]

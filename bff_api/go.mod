@@ -4,8 +4,6 @@ go 1.13
 
 require (
 	github.com/gin-gonic/gin v1.5.0
-	github.com/gomodule/redigo v2.0.0+incompatible
-	github.com/jinzhu/gorm v1.9.12
-	github.com/onsi/ginkgo v1.12.0
-	github.com/onsi/gomega v1.9.0
+	golang.org/x/sys v0.0.0-20191120155948-bd437916bb0e // indirect
+	gopkg.in/yaml.v2 v2.2.4 // indirect
 )
