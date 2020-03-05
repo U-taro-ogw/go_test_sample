@@ -4,7 +4,7 @@ from time import sleep
 
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
-redis = Redis(host='redis', port=6379, db=1)
+redis = Redis(host='redis', port=6379, db=1, decode_responses=True)
 
 @app.route('/')
 def hello():
@@ -21,6 +21,9 @@ def redis_hits():
 @app.route('/api_info', methods=['GET'])
 def api_info():
     jwt_token = request.headers.get("Authorization")
+    if not jwt_token:
+        return jsonify({"error": "Unauthorized"}), 401
+
     auth = redis.get(jwt_token)
     if not auth:
         return jsonify({"error": "Unauthorized"}), 401
@@ -45,4 +48,4 @@ def sleep_api():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", debug=True)
+    app.run(host='0.0.0.0', port=5000)
