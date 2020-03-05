@@ -1,10 +1,9 @@
 package handlers
 
 import (
-	"fmt"
+	"github.com/U-taro-ogw/go_test_sample/auth_api/db/redis"
 	"github.com/U-taro-ogw/go_test_sample/auth_api/models"
 	"github.com/U-taro-ogw/go_test_sample/auth_api/modules"
-	"github.com/U-taro-ogw/go_test_sample/auth_api/db/redis"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	"gopkg.in/go-playground/validator.v9"
@@ -60,7 +59,6 @@ func (h *UserHandler) Signin(c *gin.Context) {
 		r := redis.RedisConnect()
 		modules.RedisSet(r, jwtToken, "111")
 
-		fmt.Println("ログイン成功")
 		c.JSON(http.StatusOK, gin.H{"jwt_token": jwtToken})
 		return
 	}
