@@ -13,14 +13,7 @@ import (
 	. "github.com/onsi/gomega"
 	"net/http"
 	"net/http/httptest"
-	"reflect"
 )
-
-
-//type JwtTokenMock struct {}
-//func (j JwtTokenMock) getEmail() string {
-//	return "hoge"
-//}
 
 var _ = Describe("AuthApi", func() {
 
@@ -29,7 +22,6 @@ var _ = Describe("AuthApi", func() {
 	userHandler := handlers.UserHandler{Db: dbCon}
 
 	fmt.Println("ginkgo start")
-	fmt.Println(reflect.TypeOf("ginkgo start"))
 	r := GetMainEngine(userHandler)
 	w := httptest.NewRecorder()
 	BeforeEach(func() {
