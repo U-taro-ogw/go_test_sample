@@ -1,13 +1,40 @@
 package main_test
 
 import (
+	//. "github.com/onsi/ginkgo/tmp"
+	//"github.com/onsi/gomega/ghttp"
+
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
-	//. "github.com/U-taro-ogw/go_test_sample/bff_api"
+	. "github.com/U-taro-ogw/go_test_sample/bff_api"
+
+	"fmt"
+	"reflect"
+	"net/http"
+	"net/http/httptest"
 )
 
 var _ = Describe("BffApi", func() {
+	//apiHandler := ApiHandler{
+	//	ApiOneUrl: "http://flask_api_one:5000",
+	//	ApiTwoUrl: "http://flask_api_one:6000",
+	//}
+	//r := GetMainEngine(apiHandler)
+	w := httptest.NewRecorder()
+
+	//var server *ghttp.Server
+	//var statusCode int
+
+	BeforeEach(func() {
+		w = httptest.NewRecorder()
+		//server = ghttp.NewServer()
+		//server.AppendHandlers(ghttp.CombineHandlers(ghttp.VerifyRequest("GET", "http://flask_api_one:5000/api_info")))
+	})
+
+	//AfterEach(func() {
+	//	server.Close()
+	//})
 
 	Describe("Apis", func() {
 		Context("Request Headerにjwt tokenが存在する場合", func() {
@@ -15,7 +42,15 @@ var _ = Describe("BffApi", func() {
 				// 他APIへRequestできる状態
 				Context("全てのAPIから200が返却された場合", func() {
 					It("200を返却する", func() {
+						hoge := GetApisInfo()
+						fmt.Println(hoge)
+						fmt.Println(reflect.TypeOf(hoge))
 
+
+						//req, _ := http.NewRequest("GET", "v1/apis", nil)
+						//r.ServeHTTP(w, req)
+						//fmt.Println(w)
+						Expect(1).To(Equal(204))
 					})
 
 					It("API情報を返却する", func() {
