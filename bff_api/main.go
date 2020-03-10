@@ -1,17 +1,10 @@
 package main
 
 import (
-	//"fmt"
-	//"github.com/gin-gonic/gin"
-	"io/ioutil"
-	//"net/http"
-	"time"
-
-	"log"
-	"fmt"
-	"net/http"
-	"github.com/gorilla/mux"
 	"encoding/json"
+	"github.com/gorilla/mux"
+	"log"
+	"net/http"
 )
 
 type App struct {
@@ -20,81 +13,92 @@ type App struct {
 
 func (app *App) Initialize() {
 	app.Router = mux.NewRouter()
+	app.initializeRoutes()
 }
 
 func (app *App) Run(addr string) {
+	log.Fatal(http.ListenAndServe(addr, app.Router))
+}
 
+func (app *App) initializeRoutes() {
+	p := app.Router.PathPrefix("/v1").Subrouter()
+
+	p.HandleFunc("/apis", app.getApisInfo).Methods("GET")
+}
+
+func (app *App) getApisInfo(w http.ResponseWriter, r *http.Request) {
+	response := map[string]string{"key":"value"}
+	respondWithJSON(w, http.StatusOK, response)
+}
+
+func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
+	response, _ := json.Marshal(payload)
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(code)
+	w.Write(response)
 }
 
 func main() {
 	app := App{}
+	app.Initialize()
 	app.Run(":8082")
-
-
-	fmt.Println("BFF API main fanc")
-	router := mux.NewRouter()
-	router.PathPrefix("/v1/").Subrouter()
-
-	router.HandleFunc("/apis", GetApisInfo()).Methods("GET")
-	log.Println("Server up on port 8082")
-	//http.ListenAndServe(":8082", router)
-	log.Fatal()
 }
 
-func GetMainEngine() {
-	return http.ListenAndServe(":8082", router)
-}
-
-type Error struct {
-	Message string `json:"message"`
-}
-
-func GetApisInfo() http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		var errorObj Error
-		client := &http.Client{Timeout: time.Duration(30) * time.Second}
-		header := http.Header{}
-		header.Set("Content-Type", "application/json")
-		//header.Set("Authorization", c.Request.Header.Get("Authorization"))
-
-		fetchUrl := "http://flask_api_one:5000/api_info"
-
-		req, err := http.NewRequest("GET", fetchUrl, nil)
-		if err != nil {
-			w.Header().Set("Content-Type", "application/json")
-			w.WriteHeader(http.StatusInternalServerError)
-			json.NewEncoder(w).Encode(errorObj)
-			return
-		}
-		req.Header = header
-
-		res, err := client.Do(req)
-		if err != nil {
-			w.Header().Set("Content-Type", "application/json")
-			w.WriteHeader(http.StatusInternalServerError)
-			json.NewEncoder(w).Encode(errorObj)
-			return
-		}
-		defer res.Body.Close()
-
-		body, err := ioutil.ReadAll(res.Body)
-		if err != nil {
-			w.Header().Set("Content-Type", "application/json")
-			w.WriteHeader(http.StatusInternalServerError)
-			json.NewEncoder(w).Encode(errorObj)
-			return
-		}
-
-		fmt.Println("-------hogehogehoge")
-		fmt.Println(body)
-
-
-		errorObj.Message = "Not Found"
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		json.NewEncoder(w).Encode(errorObj)
-	}
-}
+//func GetMainEngine() {
+//	return http.ListenAndServe(":8082", router)
+//}
+//
+//type Error struct {
+//	Message string `json:"message"`
+//}
+//
+//func GetApisInfo() http.HandlerFunc {
+//	return func(w http.ResponseWriter, r *http.Request) {
+//		var errorObj Error
+//		client := &http.Client{Timeout: time.Duration(30) * time.Second}
+//		header := http.Header{}
+//		header.Set("Content-Type", "application/json")
+//		//header.Set("Authorization", c.Request.Header.Get("Authorization"))
+//
+//		fetchUrl := "http://flask_api_one:5000/api_info"
+//
+//		req, err := http.NewRequest("GET", fetchUrl, nil)
+//		if err != nil {
+//			w.Header().Set("Content-Type", "application/json")
+//			w.WriteHeader(http.StatusInternalServerError)
+//			json.NewEncoder(w).Encode(errorObj)
+//			return
+//		}
+//		req.Header = header
+//
+//		res, err := client.Do(req)
+//		if err != nil {
+//			w.Header().Set("Content-Type", "application/json")
+//			w.WriteHeader(http.StatusInternalServerError)
+//			json.NewEncoder(w).Encode(errorObj)
+//			return
+//		}
+//		defer res.Body.Close()
+//
+//		body, err := ioutil.ReadAll(res.Body)
+//		if err != nil {
+//			w.Header().Set("Content-Type", "application/json")
+//			w.WriteHeader(http.StatusInternalServerError)
+//			json.NewEncoder(w).Encode(errorObj)
+//			return
+//		}
+//
+//		fmt.Println("-------hogehogehoge")
+//		fmt.Println(body)
+//
+//
+//		errorObj.Message = "Not Found"
+//		w.Header().Set("Content-Type", "application/json")
+//		w.WriteHeader(http.StatusOK)
+//		json.NewEncoder(w).Encode(errorObj)
+//	}
+//}
 
 
 
