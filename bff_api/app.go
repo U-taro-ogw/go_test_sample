@@ -27,6 +27,8 @@ func (app *App) initializeRoutes() {
 }
 
 func (app *App) getApisInfo(w http.ResponseWriter, r *http.Request) {
+	// port 5000と6000にrequest
+	// responseを配列に詰める
 	response := map[string]string{"key":"value"}
 	respondWithJSON(w, http.StatusOK, response)
 }
