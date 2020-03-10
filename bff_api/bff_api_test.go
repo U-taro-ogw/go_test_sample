@@ -41,16 +41,22 @@ var _ = Describe("BffApi", func() {
 
 						fmt.Println("response.Code")
 						fmt.Println(response.Code)
-						fmt.Println("response.Body.String()")
-						fmt.Println(response.Body.String())
+
+						Expect(response.Code).To(Equal(http.StatusOK))
+					})
+
+					It("API情報を返却する", func() {
+						req, _ := http.NewRequest("GET", "/v1/apis", nil)
+						response := executeRequest(req)
 
 						res := map[string]string{"key":"value"}
 						bytes, _ := json.Marshal(res)
 
+						fmt.Println("response.Body.String()")
+						fmt.Println(response.Body.String())
+
 						Expect(response.Body.String()).To(Equal(string(bytes)))
 					})
-
-					//It("API情報を返却する", func() {})
 				})
 
 				Context("一部のAPIから200以外が返却された場合", func() {
